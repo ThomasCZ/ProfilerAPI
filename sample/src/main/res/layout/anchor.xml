@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:orientation="horizontal">
+
+    <TextView
+        style="@style/TextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="Anchor" />
+
+    <RadioButton
+        style="@style/RadioButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:tag="0"
+        android:text="◤"
+        android:textSize="20sp"
+        tools:checked="true" />
+
+    <RadioButton
+        style="@style/RadioButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:tag="1"
+        android:text="◥"
+        android:textSize="20sp" />
+
+    <RadioButton
+        style="@style/RadioButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:tag="2"
+        android:text="◣"
+        android:textSize="20sp" />
+
+    <RadioButton
+        style="@style/RadioButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:tag="3"
+        android:text="◢"
+        android:textSize="20sp" />
+
+    <RadioButton
+        style="@style/RadioButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:tag="4"
+        android:text="●"
+        android:textSize="20sp" />
+</RadioGroup>
