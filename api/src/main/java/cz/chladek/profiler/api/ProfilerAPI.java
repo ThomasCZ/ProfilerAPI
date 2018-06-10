@@ -61,6 +61,15 @@ public class ProfilerAPI {
         OK, NOT_INSTALLED, UNSUPPORTED_VERSION
     }
 
+    public static final class Version {
+
+        private Version() {
+        }
+
+        public static final int CODE = BuildConfig.VERSION_CODE;
+        public static final String NAME = BuildConfig.VERSION_NAME;
+    }
+
     private final Context context;
     private final Handler handler;
     private final LifecycleHelper lifecycleHelper;
