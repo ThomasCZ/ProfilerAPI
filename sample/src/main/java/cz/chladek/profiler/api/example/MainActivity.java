@@ -26,10 +26,7 @@ import cz.chladek.profiler.api.utils.Size;
 
 public class MainActivity extends Activity {
 
-    private static final String BUNDLE_VISIBLE = "BUNDLE_VISIBLE";
-
     private ProfilerAPI profiler;
-    private boolean shouldBeVisible;
 
     private TextView appStatusTextView, connectedTextView, devicesTextView, permissionTextView, currentLocationTextView, sizeTextView;
     private EditText locationPortXField, locationPortYField, locationLandXField, locationLandYField, sizeScaleField;
@@ -40,11 +37,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        shouldBeVisible = savedInstanceState != null && savedInstanceState.getBoolean(BUNDLE_VISIBLE);
-
         profiler = new ProfilerAPI(this);
         profiler.setListener(profilerEventListener);
-        profiler.restoreState(savedInstanceState);
+        profiler.getLifecycleHelper().onCreate(savedInstanceState);
 
         appStatusTextView = findViewById(R.id.appStatusTextView);
         connectedTextView = findViewById(R.id.connectedTextView);
@@ -91,32 +86,29 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
+        profiler.getLifecycleHelper().onResume();
         appStatusTextView.setText(profiler.getAppStatus().name());
 
-        if (profiler.isConnected()) {
+        if (profiler.isConnected())
             updatePermissionTextView();
-
-            if (shouldBeVisible && profiler.hasOverlayPermission())
-                profiler.setVisible(true, true);
-        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-        if (profiler.isConnected() && profiler.isVisible()) {
-            shouldBeVisible = true;
-            profiler.setVisible(false, true); // must be here for hide window when the application goes to background
-        } else
-            shouldBeVisible = false;
+        profiler.getLifecycleHelper().onPause();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        profiler.saveState(outState);
-        outState.putBoolean(BUNDLE_VISIBLE, shouldBeVisible);
+        profiler.getLifecycleHelper().onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        profiler.getLifecycleHelper().onDestroy();
+        super.onDestroy();
     }
 
     private Anchor getSelectedAnchor(int groupId) {
@@ -234,12 +226,10 @@ public class MainActivity extends Activity {
 
         @Override
         public void onStateRestored() {
-            if (profiler.isConnected()) {
-                updatePermissionTextView();
+            connectedTextView.setText("connected");
 
-                if (shouldBeVisible && profiler.isConnected() && profiler.hasOverlayPermission())
-                    profiler.setVisible(true, true);
-            }
+            if (profiler.isConnected())
+                updatePermissionTextView();
         }
     };
 

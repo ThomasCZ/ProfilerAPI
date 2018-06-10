@@ -38,7 +38,6 @@ import cz.chladek.profiler.api.utils.Size;
 public class ProfilerAPI {
 
     private static final class BundleKey {
-        private static final String CONNECTED = "CONNECTED";
         private static final String LAYOUT = "LAYOUT";
         private static final String LOCATION_PORTRAIT_ANCHOR = "LOCATION_PORTRAIT_ANCHOR";
         private static final String LOCATION_PORTRAIT_X = "LOCATION_PORTRAIT_X";
@@ -62,8 +61,9 @@ public class ProfilerAPI {
         OK, NOT_INSTALLED, UNSUPPORTED_VERSION
     }
 
-    private Context context;
-    private Handler handler;
+    private final Context context;
+    private final Handler handler;
+    private final LifecycleHelper lifecycleHelper;
     private ProfilerInterface profilerInterface;
     private DeviceConfig[] devices;
     private ProfilerEventListener listener;
@@ -74,7 +74,7 @@ public class ProfilerAPI {
         this.context = context;
 
         handler = new Handler(Looper.getMainLooper());
-        state = new Bundle();
+        lifecycleHelper = new LifecycleHelper(this);
     }
 
     /**
@@ -107,6 +107,13 @@ public class ProfilerAPI {
         }
     }
 
+    /**
+     * Useful for handle Android application lifecycle.
+     */
+    public LifecycleHelper getLifecycleHelper() {
+        return lifecycleHelper;
+    }
+
     public void setListener(ProfilerEventListener listener) {
         this.listener = listener;
     }
@@ -120,8 +127,6 @@ public class ProfilerAPI {
         intent.setAction(PROFILER_CONNECT_ACTION);
         intent.putExtra(EXTRA_SENDER_PACKAGE, context.getPackageName());
         context.bindService(intent, connection, Context.BIND_AUTO_CREATE | Context.BIND_IMPORTANT);
-
-        state.putBoolean(BundleKey.CONNECTED, true);
     }
 
     /**
@@ -154,6 +159,8 @@ public class ProfilerAPI {
 
     /**
      * Save current Profiler state. Call in {@link Activity#onSaveInstanceState(Bundle)}.
+     *
+     * @see #getLifecycleHelper()
      */
     public void saveState(@NonNull Bundle bundle) {
         bundle.putBundle(BUNDLE_SAVED_STATE, state);
@@ -161,6 +168,8 @@ public class ProfilerAPI {
 
     /**
      * Restore Profiler state. Call in {@link Activity#onCreate(Bundle)}.
+     *
+     * @see #getLifecycleHelper
      */
     public void restoreState(@Nullable Bundle bundle) {
         if (bundle == null)
@@ -168,61 +177,54 @@ public class ProfilerAPI {
 
         state = bundle.getBundle(BUNDLE_SAVED_STATE);
 
-        if (state == null) {
-            state = new Bundle();
+        if (state == null)
             return;
-        }
 
-        if (state.getBoolean(BundleKey.CONNECTED)) {
-            final ProfilerEventListener listenerBackup = listener;
+        final ProfilerEventListener listenerBackup = listener;
 
-            listener = new ProfilerEventListenerAdapter() {
-                @Override
-                public void onConnected() {
-                    if (state.containsKey(BundleKey.CHART_SCALE))
-                        setChartScale(state.getFloat(BundleKey.CHART_SCALE));
+        listener = new ProfilerEventListenerAdapter() {
+            @Override
+            public void onConnected() {
+                if (state.containsKey(BundleKey.CHART_SCALE))
+                    setChartScale(state.getFloat(BundleKey.CHART_SCALE));
 
-                    if (state.containsKey(BundleKey.WINDOW_ALPHA))
-                        setWindowAlpha(state.getFloat(BundleKey.WINDOW_ALPHA));
+                if (state.containsKey(BundleKey.WINDOW_ALPHA))
+                    setWindowAlpha(state.getFloat(BundleKey.WINDOW_ALPHA));
 
-                    if (state.containsKey(BundleKey.BACKGROUND_ALPHA))
-                        setBackgroundAlpha(state.getFloat(BundleKey.BACKGROUND_ALPHA));
+                if (state.containsKey(BundleKey.BACKGROUND_ALPHA))
+                    setBackgroundAlpha(state.getFloat(BundleKey.BACKGROUND_ALPHA));
 
-                    Layout layout = state.getParcelable(BundleKey.LAYOUT);
-                    if (layout != null)
-                        setLayout(layout);
+                Layout layout = state.getParcelable(BundleKey.LAYOUT);
+                if (layout != null)
+                    setLayout(layout);
 
-                    if (state.containsKey(BundleKey.LOCATION_PORTRAIT_ANCHOR)) {
-                        Anchor anchor = Anchor.values()[state.getInt(BundleKey.LOCATION_PORTRAIT_ANCHOR)];
-                        int x = state.getInt(BundleKey.LOCATION_PORTRAIT_X);
-                        int y = state.getInt(BundleKey.LOCATION_PORTRAIT_Y);
-                        setLocation(Orientation.PORTRAIT, anchor, x, y);
-                    }
-
-                    if (state.containsKey(BundleKey.LOCATION_LANDSCAPE_ANCHOR)) {
-                        Anchor anchor = Anchor.values()[state.getInt(BundleKey.LOCATION_LANDSCAPE_ANCHOR)];
-                        int x = state.getInt(BundleKey.LOCATION_LANDSCAPE_X);
-                        int y = state.getInt(BundleKey.LOCATION_LANDSCAPE_Y);
-                        setLocation(Orientation.LANDSCAPE, anchor, x, y);
-                    }
-
-                    if (state.getBoolean(BundleKey.VISIBLE))
-                        setVisible(true, false);
-
-                    listener = listenerBackup;
-
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (listener != null)
-                                listener.onStateRestored();
-                        }
-                    });
+                if (state.containsKey(BundleKey.LOCATION_PORTRAIT_ANCHOR)) {
+                    Anchor anchor = Anchor.values()[state.getInt(BundleKey.LOCATION_PORTRAIT_ANCHOR)];
+                    int x = state.getInt(BundleKey.LOCATION_PORTRAIT_X);
+                    int y = state.getInt(BundleKey.LOCATION_PORTRAIT_Y);
+                    setLocation(Orientation.PORTRAIT, anchor, x, y);
                 }
-            };
 
-            connect();
-        }
+                if (state.containsKey(BundleKey.LOCATION_LANDSCAPE_ANCHOR)) {
+                    Anchor anchor = Anchor.values()[state.getInt(BundleKey.LOCATION_LANDSCAPE_ANCHOR)];
+                    int x = state.getInt(BundleKey.LOCATION_LANDSCAPE_X);
+                    int y = state.getInt(BundleKey.LOCATION_LANDSCAPE_Y);
+                    setLocation(Orientation.LANDSCAPE, anchor, x, y);
+                }
+
+                if (state.getBoolean(BundleKey.VISIBLE))
+                    setVisible(true, false);
+
+                lifecycleHelper.onInstanceStateRestored();
+
+                listener = listenerBackup;
+
+                if (listener != null)
+                    listener.onStateRestored();
+            }
+        };
+
+        connect();
     }
 
     /**
@@ -456,6 +458,9 @@ public class ProfilerAPI {
 
         @Override
         public void onStarted() {
+            if (state == null)
+                state = new Bundle();
+
             started = true;
 
             handler.post(new Runnable() {
