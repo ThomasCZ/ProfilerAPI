@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import cz.chladek.profiler.api.ProfilerAPI;
 import cz.chladek.profiler.api.ProfilerEventListener;
-import cz.chladek.profiler.api.devices.BatteryDeviceConfig;
 import cz.chladek.profiler.api.devices.CPUDeviceConfig;
 import cz.chladek.profiler.api.devices.DeviceConfig;
 import cz.chladek.profiler.api.devices.GPUDeviceConfig;
@@ -22,6 +21,7 @@ import cz.chladek.profiler.api.devices.RAMDeviceConfig;
 import cz.chladek.profiler.api.layout.AbsoluteLayout;
 import cz.chladek.profiler.api.layout.FloatingLayout;
 import cz.chladek.profiler.api.utils.Anchor;
+import cz.chladek.profiler.api.utils.DeviceConfigHelper;
 import cz.chladek.profiler.api.utils.Orientation;
 import cz.chladek.profiler.api.utils.Size;
 
@@ -158,13 +158,31 @@ public class MainActivity extends Activity {
 
         FloatingLayout layout = new FloatingLayout();
 
-        for (DeviceConfig device : devices)
-            if (device instanceof CPUDeviceConfig || device instanceof GPUDeviceConfig || device instanceof RAMDeviceConfig || device instanceof BatteryDeviceConfig)
-                layout.addDevice(device);
+        CPUDeviceConfig[] cpus = DeviceConfigHelper.findDevices(devices, CPUDeviceConfig.class);
+        GPUDeviceConfig gpu = DeviceConfigHelper.findDevice(devices, GPUDeviceConfig.class);
+        RAMDeviceConfig ram = DeviceConfigHelper.findDevice(devices, RAMDeviceConfig.class);
+
+        if (cpus.length > 0)
+            layout.addDevice(cpus[0]);
+
+        if (gpu != null)
+            layout.addDevice(gpu);
+
+        if (ram != null)
+            layout.addDevice(ram);
+
+        layout.addDevice(null);
+
+        for (int i = 1; i < cpus.length; i++)
+            layout.addDevice(cpus[i]);
 
         int count = layout.getCount();
-        int w = (int) (1 + Math.random() * 5);
-        int h = count / w + 1;
+        int w = (int) (2 + Math.random() * 4);
+        int h = count / w;
+
+        if (w * h < count)
+            h++;
+
         layout.pack(direction, w, h);
 
         profiler.setLayout(layout);
