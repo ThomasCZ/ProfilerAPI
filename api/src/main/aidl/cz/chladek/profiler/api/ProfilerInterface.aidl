@@ -14,9 +14,13 @@ interface ProfilerInterface {
 
     void setLayout(in Layout layout);
 
-    Point getLocation();
+    int getWindowAnchor(int orientation);
 
-    void setLocation(int orientation, int anchor, int x, int y);
+    void setWindowAnchor(int orientation, int anchor);
+
+    Point getCurrentLocation();
+
+    void setLocation(int orientation, int x, int y);
 
     void setBackgroundAlpha(float alpha);
 

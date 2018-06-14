@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -30,7 +31,7 @@ public class MainActivity extends Activity {
 
     private TextView appStatusTextView, connectedTextView, devicesTextView, permissionTextView, currentLocationTextView, sizeTextView;
     private EditText locationPortXField, locationPortYField, locationLandXField, locationLandYField, sizeScaleField;
-    private RadioGroup floatingLayoutDirectionGroup;
+    private RadioGroup floatingLayoutDirectionGroup, windowAnchorPortGroup, windowAnchorLandGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,10 +74,12 @@ public class MainActivity extends Activity {
         locationLandYField = findViewById(R.id.locationLandYField);
         sizeScaleField = findViewById(R.id.sizeScaleField);
 
+        windowAnchorPortGroup = findViewById(R.id.anchorPortGroup);
+        windowAnchorLandGroup = findViewById(R.id.anchorLandGroup);
         floatingLayoutDirectionGroup = findViewById(R.id.floatingLayoutDirectionGroup);
 
-        getSelectedAnchor(R.id.locPortAnchorGroup);
-        getSelectedAnchor(R.id.locLandAnchorGroup);
+        setAnchorListener(windowAnchorPortGroup, Orientation.PORTRAIT, onAnchorChangedListener);
+        setAnchorListener(windowAnchorLandGroup, Orientation.LANDSCAPE, onAnchorChangedListener);
 
         ((SeekBar) findViewById(R.id.backgroundAlphaSeekBar)).setOnSeekBarChangeListener(onSeekBarChangeListener);
         ((SeekBar) findViewById(R.id.monitorAlphaSeekBar)).setOnSeekBarChangeListener(onSeekBarChangeListener);
@@ -111,20 +114,14 @@ public class MainActivity extends Activity {
         super.onDestroy();
     }
 
-    private Anchor getSelectedAnchor(int groupId) {
-        RadioGroup group = findViewById(groupId);
+    private void setAnchorListener(RadioGroup group, Orientation orientation, CompoundButton.OnCheckedChangeListener listener) {
+        group.setTag(orientation.ordinal());
 
-        int selectedId = group.getCheckedRadioButtonId();
-        RadioButton button;
+        RadioButton button = (RadioButton) group.getChildAt(0);
+        button.setChecked(true);
 
-        if (selectedId == -1) {
-            button = (RadioButton) group.getChildAt(1);
-            button.setChecked(true);
-        } else
-            button = findViewById(selectedId);
-
-        int ordinal = Integer.parseInt((String) button.getTag());
-        return Anchor.values()[ordinal];
+        for (int i = 0; i < group.getChildCount(); i++)
+            ((RadioButton) group.getChildAt(i)).setOnCheckedChangeListener(listener);
     }
 
     private void printSupportedDevices() {
@@ -178,9 +175,8 @@ public class MainActivity extends Activity {
         String yS = locationPortYField.getText().toString();
         int x = xS.length() == 0 ? 0 : Integer.parseInt(xS);
         int y = yS.length() == 0 ? 0 : Integer.parseInt(yS);
-        Anchor anchor = getSelectedAnchor(R.id.locPortAnchorGroup);
 
-        profiler.setLocation(Orientation.PORTRAIT, anchor, x, y);
+        profiler.setLocation(Orientation.PORTRAIT, x, y);
     }
 
     private void setLandscapeLocation() {
@@ -188,9 +184,8 @@ public class MainActivity extends Activity {
         String yS = locationLandYField.getText().toString();
         int x = xS.length() == 0 ? 0 : Integer.parseInt(xS);
         int y = yS.length() == 0 ? 0 : Integer.parseInt(yS);
-        Anchor anchor = getSelectedAnchor(R.id.locLandAnchorGroup);
 
-        profiler.setLocation(Orientation.LANDSCAPE, anchor, x, y);
+        profiler.setLocation(Orientation.LANDSCAPE, x, y);
     }
 
     private void setChartScale() {
@@ -228,8 +223,17 @@ public class MainActivity extends Activity {
         public void onStateRestored() {
             connectedTextView.setText("connected");
 
-            if (profiler.isConnected())
+            if (profiler.isConnected()) {
                 updatePermissionTextView();
+
+                Anchor anchorPort = profiler.getWindowAnchor(Orientation.PORTRAIT);
+                RadioButton buttonPort = (RadioButton) windowAnchorPortGroup.getChildAt(anchorPort.ordinal());
+                buttonPort.setChecked(true);
+
+                Anchor anchorLand = profiler.getWindowAnchor(Orientation.LANDSCAPE);
+                RadioButton buttonLand = (RadioButton) windowAnchorLandGroup.getChildAt(anchorLand.ordinal());
+                buttonLand.setChecked(true);
+            }
         }
     };
 
@@ -283,7 +287,7 @@ public class MainActivity extends Activity {
                     printSupportedDevices();
                     return;
                 case R.id.getLocationButton:
-                    Point location = profiler.getLocation();
+                    Point location = profiler.getCurrentLocation();
                     currentLocationTextView.setText("x: " + location.x + ", y: " + location.y);
                     return;
                 case R.id.setLocationPortButton:
@@ -310,6 +314,20 @@ public class MainActivity extends Activity {
                     profiler.setVisible(true, true);
                     break;
             }
+        }
+    };
+
+    private CompoundButton.OnCheckedChangeListener onAnchorChangedListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton button, boolean isChecked) {
+            if (!isChecked)
+                return;
+
+            RadioGroup group = (RadioGroup) button.getParent();
+            Orientation orientation = Orientation.values()[(int) group.getTag()];
+            Anchor anchor = Anchor.values()[Integer.parseInt((String) button.getTag())];
+
+            profiler.setWindowAnchor(orientation, anchor);
         }
     };
 

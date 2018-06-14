@@ -39,12 +39,12 @@ public class ProfilerAPI {
 
     private static final class BundleKey {
         private static final String LAYOUT = "LAYOUT";
-        private static final String LOCATION_PORTRAIT_ANCHOR = "LOCATION_PORTRAIT_ANCHOR";
-        private static final String LOCATION_PORTRAIT_X = "LOCATION_PORTRAIT_X";
-        private static final String LOCATION_PORTRAIT_Y = "LOCATION_PORTRAIT_Y";
-        private static final String LOCATION_LANDSCAPE_ANCHOR = "LOCATION_LANDSCAPE_ANCHOR";
-        private static final String LOCATION_LANDSCAPE_X = "LOCATION_LANDSCAPE_X";
-        private static final String LOCATION_LANDSCAPE_Y = "LOCATION_LANDSCAPE_Y";
+        private static final String WINDOW_ANCHOR_PORTRAIT = "WINDOW_ANCHOR_PORTRAIT";
+        private static final String WINDOW_ANCHOR_LANDSCAPE = "WINDOW_ANCHOR_LANDSCAPE";
+        private static final String LOCATION_X_PORTRAIT = "LOCATION_X_PORTRAIT";
+        private static final String LOCATION_Y_PORTRAIT = "LOCATION_Y_PORTRAIT";
+        private static final String LOCATION_X_LANDSCAPE = "LOCATION_X_LANDSCAPE";
+        private static final String LOCATION_Y_LANDSCAPE = "LOCATION_Y_LANDSCAPE";
         private static final String BACKGROUND_ALPHA = "BACKGROUND_ALPHA";
         private static final String WINDOW_ALPHA = "WINDOW_ALPHA";
         private static final String CHART_SCALE = "CHART_SCALE";
@@ -146,7 +146,9 @@ public class ProfilerAPI {
             context.unbindService(connection);
 
             profilerInterface = null;
-            state.clear();
+
+            if (state != null)
+                state.clear();
 
             if (started) {
                 started = false;
@@ -207,18 +209,26 @@ public class ProfilerAPI {
                 if (layout != null)
                     setLayout(layout);
 
-                if (state.containsKey(BundleKey.LOCATION_PORTRAIT_ANCHOR)) {
-                    Anchor anchor = Anchor.values()[state.getInt(BundleKey.LOCATION_PORTRAIT_ANCHOR)];
-                    int x = state.getInt(BundleKey.LOCATION_PORTRAIT_X);
-                    int y = state.getInt(BundleKey.LOCATION_PORTRAIT_Y);
-                    setLocation(Orientation.PORTRAIT, anchor, x, y);
+                if (state.containsKey(BundleKey.WINDOW_ANCHOR_PORTRAIT)) {
+                    Anchor anchor = Anchor.values()[state.getInt(BundleKey.WINDOW_ANCHOR_PORTRAIT)];
+                    setWindowAnchor(Orientation.PORTRAIT, anchor);
                 }
 
-                if (state.containsKey(BundleKey.LOCATION_LANDSCAPE_ANCHOR)) {
-                    Anchor anchor = Anchor.values()[state.getInt(BundleKey.LOCATION_LANDSCAPE_ANCHOR)];
-                    int x = state.getInt(BundleKey.LOCATION_LANDSCAPE_X);
-                    int y = state.getInt(BundleKey.LOCATION_LANDSCAPE_Y);
-                    setLocation(Orientation.LANDSCAPE, anchor, x, y);
+                if (state.containsKey(BundleKey.WINDOW_ANCHOR_LANDSCAPE)) {
+                    Anchor anchor = Anchor.values()[state.getInt(BundleKey.WINDOW_ANCHOR_LANDSCAPE)];
+                    setWindowAnchor(Orientation.LANDSCAPE, anchor);
+                }
+
+                if (state.containsKey(BundleKey.LOCATION_X_PORTRAIT)) {
+                    int x = state.getInt(BundleKey.LOCATION_X_PORTRAIT);
+                    int y = state.getInt(BundleKey.LOCATION_Y_PORTRAIT);
+                    setLocation(Orientation.PORTRAIT, x, y);
+                }
+
+                if (state.containsKey(BundleKey.LOCATION_X_LANDSCAPE)) {
+                    int x = state.getInt(BundleKey.LOCATION_X_LANDSCAPE);
+                    int y = state.getInt(BundleKey.LOCATION_Y_LANDSCAPE);
+                    setLocation(Orientation.LANDSCAPE, x, y);
                 }
 
                 if (state.getBoolean(BundleKey.VISIBLE))
@@ -274,16 +284,52 @@ public class ProfilerAPI {
         }
     }
 
-    /**
-     * Returns current window location in pixels from set anchor.
-     *
-     * @see #setLocation(Orientation, Anchor, int, int)
-     */
-    public Point getLocation() {
+    @NonNull
+    public Anchor getWindowAnchor(@NonNull Orientation orientation) {
         throwWhenDisconnected();
 
         try {
-            return profilerInterface.getLocation();
+            int anchor = profilerInterface.getWindowAnchor(orientation.ordinal());
+            return Anchor.values()[anchor];
+        } catch (RemoteException ignored) {
+            return Anchor.TOP_LEFT;
+        }
+    }
+
+    /**
+     * Set window anchor for specific orientation. Default is {@link Anchor#TOP_LEFT}.
+     *
+     * @see #setLocation(Orientation, int, int)
+     * @see #setChartScale(float)
+     */
+    public void setWindowAnchor(@NonNull Orientation orientation, @NonNull Anchor anchor) {
+        throwWhenDisconnected();
+
+        switch (orientation) {
+            case PORTRAIT:
+                state.putInt(BundleKey.WINDOW_ANCHOR_PORTRAIT, anchor.ordinal());
+                break;
+            case LANDSCAPE:
+                state.putInt(BundleKey.WINDOW_ANCHOR_LANDSCAPE, anchor.ordinal());
+                break;
+        }
+
+        try {
+            profilerInterface.setWindowAnchor(orientation.ordinal(), anchor.ordinal());
+        } catch (RemoteException ignored) {
+        }
+    }
+
+    /**
+     * Returns current window location in pixels from set anchor.
+     *
+     * @see #setLocation(Orientation, int, int)
+     */
+    public Point getCurrentLocation() {
+        throwWhenDisconnected();
+
+        try {
+            return profilerInterface.getCurrentLocation();
         } catch (RemoteException ignored) {
             return null;
         }
@@ -292,24 +338,22 @@ public class ProfilerAPI {
     /**
      * Sets window location for screen orientation in pixels from top left corner with desired window anchor.
      */
-    public void setLocation(@NonNull Orientation orientation, @NonNull Anchor anchor, int x, int y) {
+    public void setLocation(@NonNull Orientation orientation, int x, int y) {
         throwWhenDisconnected();
 
         switch (orientation) {
             case PORTRAIT:
-                state.putInt(BundleKey.LOCATION_PORTRAIT_ANCHOR, anchor.ordinal());
-                state.putInt(BundleKey.LOCATION_PORTRAIT_X, x);
-                state.putInt(BundleKey.LOCATION_PORTRAIT_Y, y);
+                state.putInt(BundleKey.LOCATION_X_PORTRAIT, x);
+                state.putInt(BundleKey.LOCATION_Y_PORTRAIT, y);
                 break;
             case LANDSCAPE:
-                state.putInt(BundleKey.LOCATION_LANDSCAPE_ANCHOR, anchor.ordinal());
-                state.putInt(BundleKey.LOCATION_LANDSCAPE_X, x);
-                state.putInt(BundleKey.LOCATION_LANDSCAPE_Y, y);
+                state.putInt(BundleKey.LOCATION_X_LANDSCAPE, x);
+                state.putInt(BundleKey.LOCATION_Y_LANDSCAPE, y);
                 break;
         }
 
         try {
-            profilerInterface.setLocation(orientation.ordinal(), anchor.ordinal(), x, y);
+            profilerInterface.setLocation(orientation.ordinal(), x, y);
         } catch (RemoteException ignored) {
         }
     }
@@ -356,7 +400,7 @@ public class ProfilerAPI {
     }
 
     /**
-     * Scale of the profiler charts. Scale pivot is anchor set by {@link #setLocation(Orientation, Anchor, int, int)}.
+     * Scale of the profiler charts. Scale pivot is anchor set by {@link #setLocation(Orientation, int, int)}.
      *
      * @param scale recommended range is between 0.75 and 1.25, but value is clamped to range from 0 to 2
      */
