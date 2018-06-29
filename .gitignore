@@ -67,3 +67,6 @@ fastlane/test_output
 fastlane/readme.md
 
 docs/
+
+/.idea/markdown-navigator.xml
+/.idea/markdown-navigator
