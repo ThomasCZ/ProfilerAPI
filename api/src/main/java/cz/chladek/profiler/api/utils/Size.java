@@ -5,43 +5,43 @@ import android.os.Parcelable;
 
 public class Size implements Parcelable {
 
-    public final int width, height;
+	public final int width, height;
 
-    public Size(int width, int height) {
-        this.width = width;
-        this.height = height;
-    }
+	public Size(int width, int height) {
+		this.width = width;
+		this.height = height;
+	}
 
-    protected Size(Parcel in) {
-        width = in.readInt();
-        height = in.readInt();
-    }
+	protected Size(Parcel in) {
+		width = in.readInt();
+		height = in.readInt();
+	}
 
-    @Override
-    public String toString() {
-        return "Size{width=" + width + ", height=" + height + '}';
-    }
+	@Override
+	public String toString() {
+		return "Size{width=" + width + ", height=" + height + '}';
+	}
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
+	@Override
+	public int describeContents() {
+		return 0;
+	}
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(width);
-        dest.writeInt(height);
-    }
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(width);
+		dest.writeInt(height);
+	}
 
-    public static final Creator<Size> CREATOR = new Creator<Size>() {
-        @Override
-        public Size createFromParcel(Parcel in) {
-            return new Size(in);
-        }
+	public static final Creator<Size> CREATOR = new Creator<Size>() {
+		@Override
+		public Size createFromParcel(Parcel in) {
+			return new Size(in);
+		}
 
-        @Override
-        public Size[] newArray(int size) {
-            return new Size[size];
-        }
-    };
+		@Override
+		public Size[] newArray(int size) {
+			return new Size[size];
+		}
+	};
 }

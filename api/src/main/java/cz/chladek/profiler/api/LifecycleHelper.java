@@ -7,47 +7,47 @@ import android.os.Bundle;
  */
 public class LifecycleHelper {
 
-    private static final String BUNDLE_VISIBLE = "BUNDLE_VISIBLE";
+	private static final String BUNDLE_VISIBLE = "BUNDLE_VISIBLE";
 
-    private final ProfilerAPI profiler;
-    private boolean shouldBeVisible;
+	private final ProfilerAPI profiler;
+	private boolean shouldBeVisible;
 
-    protected LifecycleHelper(ProfilerAPI profiler) {
-        this.profiler = profiler;
-    }
+	protected LifecycleHelper(ProfilerAPI profiler) {
+		this.profiler = profiler;
+	}
 
-    public void onCreate(Bundle savedInstanceState) {
-        shouldBeVisible = savedInstanceState != null && savedInstanceState.getBoolean(BUNDLE_VISIBLE);
-        profiler.restoreState(savedInstanceState);
-    }
+	public void onCreate(Bundle savedInstanceState) {
+		shouldBeVisible = savedInstanceState != null && savedInstanceState.getBoolean(BUNDLE_VISIBLE);
+		profiler.restoreState(savedInstanceState);
+	}
 
-    public void onResume() {
-        showWindowIfShouldBeVisible();
-    }
+	public void onResume() {
+		showWindowIfShouldBeVisible();
+	}
 
-    public void onPause() {
-        if (profiler.isConnected() && profiler.isVisible()) {
-            shouldBeVisible = true;
-            profiler.setVisible(false, true);
-        } else
-            shouldBeVisible = false;
-    }
+	public void onPause() {
+		if (profiler.isConnected() && profiler.isVisible()) {
+			shouldBeVisible = true;
+			profiler.setVisible(false, true);
+		} else
+			shouldBeVisible = false;
+	}
 
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(BUNDLE_VISIBLE, shouldBeVisible);
-        profiler.saveState(outState);
-    }
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putBoolean(BUNDLE_VISIBLE, shouldBeVisible);
+		profiler.saveState(outState);
+	}
 
-    public void onDestroy() {
-        profiler.disconnect();
-    }
+	public void onDestroy() {
+		profiler.disconnect();
+	}
 
-    protected void onInstanceStateRestored() {
-        showWindowIfShouldBeVisible();
-    }
+	protected void onInstanceStateRestored() {
+		showWindowIfShouldBeVisible();
+	}
 
-    private void showWindowIfShouldBeVisible() {
-        if (shouldBeVisible && profiler.isConnected() && profiler.hasOverlayPermission())
-            profiler.setVisible(true, true);
-    }
+	private void showWindowIfShouldBeVisible() {
+		if (shouldBeVisible && profiler.isConnected() && profiler.hasOverlayPermission())
+			profiler.setVisible(true, true);
+	}
 }

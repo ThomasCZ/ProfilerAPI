@@ -1,36 +1,36 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 27
+	compileSdkVersion 27
 
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 27
-        versionCode 2
-        versionName "1.0.1"
+	defaultConfig {
+		minSdkVersion 14
+		targetSdkVersion 27
+		versionCode 2
+		versionName "1.0.1"
 
-        consumerProguardFiles "proguard-rules.pro"
-    }
+		consumerProguardFiles "proguard-rules.pro"
+	}
 }
 
 configurations {
-    javadocs
+	javadocs
 }
 
 dependencies {
-    javadocs 'com.android.support:support-annotations:27+'
-    implementation "com.android.support:support-annotations:27+"
+	javadocs 'com.android.support:support-annotations:27+'
+	implementation "com.android.support:support-annotations:27+"
 }
 
 task javadoc(type: Javadoc) {
-    failOnError false
-    source = android.sourceSets.main.java.sourceFiles
-    destinationDir = rootProject.file("docs/javadoc")
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.compile
-    classpath += configurations.javadocs
-    options.noTimestamp = true
-    options.links = ['https://developer.android.com/reference/']
+	failOnError false
+	source = android.sourceSets.main.java.sourceFiles
+	destinationDir = rootProject.file("docs/javadoc")
+	classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+	classpath += configurations.compile
+	classpath += configurations.javadocs
+	options.noTimestamp = true
+	options.links = ['https://developer.android.com/reference/']
 }
 
 apply from: 'publish.gradle'

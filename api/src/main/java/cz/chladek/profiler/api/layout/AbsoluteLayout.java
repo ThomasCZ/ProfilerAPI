@@ -12,87 +12,87 @@ import cz.chladek.profiler.api.devices.DeviceConfig;
  */
 public class AbsoluteLayout extends Layout {
 
-    private DeviceConfig[][] devices;
+	private DeviceConfig[][] devices;
 
-    public AbsoluteLayout(int width, int height) {
-        super(Type.ABSOLUTE);
+	public AbsoluteLayout(int width, int height) {
+		super(Type.ABSOLUTE);
 
-        this.width = width;
-        this.height = height;
-        devices = new DeviceConfig[width][height];
-    }
+		this.width = width;
+		this.height = height;
+		devices = new DeviceConfig[width][height];
+	}
 
-    protected AbsoluteLayout(Parcel in) {
-        super(in, Type.ABSOLUTE);
-    }
+	protected AbsoluteLayout(Parcel in) {
+		super(in, Type.ABSOLUTE);
+	}
 
-    @SuppressWarnings("unchecked")
-    @Nullable
-    @Override
-    public <T extends DeviceConfig> T getDevice(int x, int y) {
-        checkRange(x, y);
-        return (T) devices[x][y];
-    }
+	@SuppressWarnings("unchecked")
+	@Nullable
+	@Override
+	public <T extends DeviceConfig> T getDevice(int x, int y) {
+		checkRange(x, y);
+		return (T) devices[x][y];
+	}
 
-    @Override
-    public boolean containsDevice(@Nullable DeviceConfig device) {
-        for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
-                if (devices[x][y] == device)
-                    return true;
+	@Override
+	public boolean containsDevice(@Nullable DeviceConfig device) {
+		for (int x = 0; x < width; x++)
+			for (int y = 0; y < height; y++)
+				if (devices[x][y] == device)
+					return true;
 
-        return false;
-    }
+		return false;
+	}
 
-    @Override
-    public int getCount() {
-        int count = 0;
-        for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
-                if (devices[x][y] != null)
-                    count++;
+	@Override
+	public int getCount() {
+		int count = 0;
+		for (int x = 0; x < width; x++)
+			for (int y = 0; y < height; y++)
+				if (devices[x][y] != null)
+					count++;
 
-        return count;
-    }
+		return count;
+	}
 
-    /**
-     * Sets device in desired location. Null for remove actual.
-     */
-    public void setDevice(int x, int y, @Nullable DeviceConfig device) {
-        checkRange(x, y);
-        devices[x][y] = device;
-    }
+	/**
+	 * Sets device in desired location. Null for remove actual.
+	 */
+	public void setDevice(int x, int y, @Nullable DeviceConfig device) {
+		checkRange(x, y);
+		devices[x][y] = device;
+	}
 
-    @Override
-    public void removeDevice(@Nullable DeviceConfig device) {
-        if (device == null)
-            return;
+	@Override
+	public void removeDevice(@Nullable DeviceConfig device) {
+		if (device == null)
+			return;
 
-        for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
-                if (devices[x][y] == device) {
-                    devices[x][y] = null;
-                    return;
-                }
-    }
+		for (int x = 0; x < width; x++)
+			for (int y = 0; y < height; y++)
+				if (devices[x][y] == device) {
+					devices[x][y] = null;
+					return;
+				}
+	}
 
-    @Override
-    protected void processItems(LayoutItem[] items) {
-        devices = new DeviceConfig[width][height];
+	@Override
+	protected void processItems(LayoutItem[] items) {
+		devices = new DeviceConfig[width][height];
 
-        for (LayoutItem item : items)
-            devices[item.x][item.y] = item.device;
-    }
+		for (LayoutItem item : items)
+			devices[item.x][item.y] = item.device;
+	}
 
-    @Override
-    protected LayoutItem[] getItems() {
-        ArrayList<LayoutItem> items = new ArrayList<>();
+	@Override
+	protected LayoutItem[] getItems() {
+		ArrayList<LayoutItem> items = new ArrayList<>();
 
-        for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
-                if (devices[x][y] != null)
-                    items.add(new LayoutItem(x, y, devices[x][y]));
+		for (int x = 0; x < width; x++)
+			for (int y = 0; y < height; y++)
+				if (devices[x][y] != null)
+					items.add(new LayoutItem(x, y, devices[x][y]));
 
-        return items.toArray(new LayoutItem[0]);
-    }
+		return items.toArray(new LayoutItem[0]);
+	}
 }

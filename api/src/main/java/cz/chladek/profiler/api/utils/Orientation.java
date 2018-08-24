@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.res.Configuration;
 
 public enum Orientation {
-    PORTRAIT, LANDSCAPE;
+	PORTRAIT, LANDSCAPE;
 
-    public static Orientation getCurrent(Context context) {
-        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? PORTRAIT : LANDSCAPE;
-    }
+	public static Orientation getCurrent(Context context) {
+		return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? PORTRAIT : LANDSCAPE;
+	}
 }

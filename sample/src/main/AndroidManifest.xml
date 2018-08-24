@@ -1,20 +1,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cz.chladek.profiler.api.example">
+	package="cz.chladek.profiler.api.example">
 
-    <application
-        android:icon="@mipmap/icon"
-        android:label="Profiler API"
-        android:theme="@style/App">
+	<application
+		android:icon="@mipmap/icon"
+		android:label="Profiler API"
+		android:theme="@style/App">
 
-        <activity
-            android:name=".MainActivity"
-            android:configChanges="orientation|screenSize"
-            android:windowSoftInputMode="stateHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+		<activity
+			android:name=".MainActivity"
+			android:configChanges="orientation|screenSize"
+			android:windowSoftInputMode="stateHidden">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+	</application>
 </manifest>

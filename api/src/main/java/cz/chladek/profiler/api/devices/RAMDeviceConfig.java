@@ -4,12 +4,12 @@ import android.os.Parcel;
 
 public class RAMDeviceConfig extends DeviceConfig {
 
-    protected RAMDeviceConfig(Parcel in) {
-        super(in, Type.RAM);
-    }
+	protected RAMDeviceConfig(Parcel in) {
+		super(in, Type.RAM);
+	}
 
-    @Override
-    public String toString() {
-        return "RAMDeviceConfig{}";
-    }
+	@Override
+	public String toString() {
+		return "RAMDeviceConfig{}";
+	}
 }
