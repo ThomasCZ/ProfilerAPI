@@ -19,6 +19,7 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import cz.chladek.profiler.api.devices.DeviceConfig;
@@ -258,7 +259,14 @@ public class ProfilerAPI {
 			throwWhenDisconnected();
 
 			try {
-				devices = profilerInterface.getSupportedDevices();
+				DeviceConfig[] array = profilerInterface.getSupportedDevices();
+				ArrayList<DeviceConfig> list = new ArrayList<>(array.length);
+
+				for (DeviceConfig device : array)
+					if (device != null)
+						list.add(device);
+
+				devices = list.toArray(new DeviceConfig[0]);
 			} catch (RemoteException ignored) {
 			}
 		}
