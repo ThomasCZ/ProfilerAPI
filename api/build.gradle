@@ -18,8 +18,8 @@ configurations {
 }
 
 dependencies {
-	javadocs 'com.android.support:support-annotations:27+'
-	implementation "com.android.support:support-annotations:27+"
+	javadocs 'androidx.annotation:annotation:+'
+	implementation 'androidx.annotation:annotation:+'
 }
 
 task javadoc(type: Javadoc) {

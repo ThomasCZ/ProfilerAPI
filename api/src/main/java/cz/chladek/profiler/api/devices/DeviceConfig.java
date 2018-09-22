@@ -2,7 +2,9 @@ package cz.chladek.profiler.api.devices;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 
 public abstract class DeviceConfig implements Parcelable {
 
@@ -39,10 +41,12 @@ public abstract class DeviceConfig implements Parcelable {
 		unit = Unit.values()[in.readInt()];
 	}
 
+	@NonNull
 	public Type getType() {
 		return type;
 	}
 
+	@NonNull
 	public String getLabelFormat() {
 		return labelFormat;
 	}
@@ -57,7 +61,7 @@ public abstract class DeviceConfig implements Parcelable {
 	 * @see #TAG_ARROW_UP
 	 * @see #TAG_ARROW_DOWN
 	 */
-	public void setLabelFormat(String labelFormat) {
+	public void setLabelFormat(@NonNull String labelFormat) {
 		this.labelFormat = labelFormat;
 	}
 

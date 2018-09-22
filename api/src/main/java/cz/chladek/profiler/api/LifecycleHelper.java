@@ -2,6 +2,9 @@ package cz.chladek.profiler.api;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 /**
  * Helper class for handle Android application lifecycle.
  */
@@ -12,11 +15,11 @@ public class LifecycleHelper {
 	private final ProfilerAPI profiler;
 	private boolean shouldBeVisible;
 
-	protected LifecycleHelper(ProfilerAPI profiler) {
+	protected LifecycleHelper(@NonNull ProfilerAPI profiler) {
 		this.profiler = profiler;
 	}
 
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(@Nullable Bundle savedInstanceState) {
 		shouldBeVisible = savedInstanceState != null && savedInstanceState.getBoolean(BUNDLE_VISIBLE);
 		profiler.restoreState(savedInstanceState);
 	}
@@ -33,7 +36,7 @@ public class LifecycleHelper {
 			shouldBeVisible = false;
 	}
 
-	public void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(@NonNull Bundle outState) {
 		outState.putBoolean(BUNDLE_VISIBLE, shouldBeVisible);
 		profiler.saveState(outState);
 	}

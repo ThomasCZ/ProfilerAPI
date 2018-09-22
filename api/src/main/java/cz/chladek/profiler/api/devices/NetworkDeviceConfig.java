@@ -1,7 +1,8 @@
 package cz.chladek.profiler.api.devices;
 
 import android.os.Parcel;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 public class NetworkDeviceConfig extends DeviceConfig {
 
@@ -18,10 +19,12 @@ public class NetworkDeviceConfig extends DeviceConfig {
 		direction = Direction.values()[in.readInt()];
 	}
 
+	@NonNull
 	public String getName() {
 		return name;
 	}
 
+	@NonNull
 	public Direction getDirection() {
 		return direction;
 	}

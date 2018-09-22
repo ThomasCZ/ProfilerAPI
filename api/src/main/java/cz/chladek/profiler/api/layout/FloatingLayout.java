@@ -1,11 +1,11 @@
 package cz.chladek.profiler.api.layout;
 
 import android.os.Parcel;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import cz.chladek.profiler.api.devices.DeviceConfig;
 
 /**

@@ -15,13 +15,13 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
-import android.support.annotation.FloatRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import cz.chladek.profiler.api.devices.DeviceConfig;
 import cz.chladek.profiler.api.layout.AbsoluteLayout;
 import cz.chladek.profiler.api.layout.FloatingLayout;

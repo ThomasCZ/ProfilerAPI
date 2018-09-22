@@ -1,6 +1,6 @@
 package cz.chladek.profiler.api;
 
-import android.support.annotation.MainThread;
+import androidx.annotation.MainThread;
 
 public interface ProfilerEventListener {
 

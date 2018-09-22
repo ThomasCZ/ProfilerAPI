@@ -2,10 +2,10 @@ package cz.chladek.profiler.api.layout;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 
 import java.util.Arrays;
 
+import androidx.annotation.Nullable;
 import cz.chladek.profiler.api.devices.DeviceConfig;
 
 public abstract class Layout implements Parcelable {

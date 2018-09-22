@@ -2,7 +2,8 @@ package cz.chladek.profiler.api.utils;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 public class Size implements Parcelable {
 
@@ -13,7 +14,7 @@ public class Size implements Parcelable {
 		this.height = height;
 	}
 
-	protected Size(Parcel in) {
+	protected Size(@NonNull Parcel in) {
 		width = in.readInt();
 		height = in.readInt();
 	}
