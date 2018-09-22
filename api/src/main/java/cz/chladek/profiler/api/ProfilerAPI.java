@@ -101,7 +101,7 @@ public class ProfilerAPI {
 	public AppStatus getAppStatus() {
 		try {
 			PackageInfo info = context.getPackageManager().getPackageInfo(PROFILER_PACKAGE, PackageManager.GET_META_DATA);
-			return info.versionCode >= 14 ? AppStatus.OK : AppStatus.UNSUPPORTED_VERSION;
+			return info.versionCode >= 18 ? AppStatus.OK : AppStatus.UNSUPPORTED_VERSION;
 		} catch (PackageManager.NameNotFoundException e) {
 			return AppStatus.NOT_INSTALLED;
 		}
@@ -131,8 +131,14 @@ public class ProfilerAPI {
 
 	/**
 	 * Establish communication with the application.
+	 *
+	 * @throws IllegalArgumentException when {@link ProfilerAPI#getAppStatus()} not returns {@link ProfilerAPI.AppStatus#OK}.
 	 */
 	public void connect() {
+		AppStatus appStatus = getAppStatus();
+		if (appStatus != AppStatus.OK)
+			throw new IllegalArgumentException("getAppStatus() must returns AppStatus.OK to connect.");
+
 		Intent intent = new Intent();
 		intent.setPackage(PROFILER_PACKAGE);
 		intent.setAction(PROFILER_CONNECT_ACTION);

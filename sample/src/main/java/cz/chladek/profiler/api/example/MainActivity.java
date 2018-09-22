@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -29,6 +30,7 @@ public class MainActivity extends Activity {
 
 	private ProfilerAPI profiler;
 
+	private Button connectButton;
 	private TextView appStatusTextView, connectedTextView, devicesTextView, permissionTextView, currentLocationTextView, sizeTextView;
 	private EditText locationPortXField, locationPortYField, locationLandXField, locationLandYField, sizeScaleField;
 	private RadioGroup floatingLayoutDirectionGroup, windowAnchorPortGroup, windowAnchorLandGroup;
@@ -49,7 +51,9 @@ public class MainActivity extends Activity {
 		currentLocationTextView = findViewById(R.id.currentLocationTextView);
 		sizeTextView = findViewById(R.id.sizeTextView);
 
-		findViewById(R.id.connectButton).setOnClickListener(onClickListener);
+		connectButton = findViewById(R.id.connectButton);
+		connectButton.setOnClickListener(onClickListener);
+
 		findViewById(R.id.disconnectButton).setOnClickListener(onClickListener);
 		findViewById(R.id.showButton).setOnClickListener(onClickListener);
 		findViewById(R.id.showAnimatedButton).setOnClickListener(onClickListener);
@@ -90,7 +94,10 @@ public class MainActivity extends Activity {
 		super.onResume();
 
 		profiler.getLifecycleHelper().onResume();
-		appStatusTextView.setText(profiler.getAppStatus().name());
+
+		ProfilerAPI.AppStatus status = profiler.getAppStatus();
+		appStatusTextView.setText(status.name());
+		connectButton.setEnabled(status == ProfilerAPI.AppStatus.OK);
 
 		if (profiler.isConnected())
 			updatePermissionTextView();
