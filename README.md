@@ -5,7 +5,7 @@ Lightweight API that allows integrate [Profiler](https://play.google.com/store/a
 #### Profiler application features
 * Real-time component monitoring in floating window.
 * Allows to monitor following components (depends on data provided by a device). Check compatibility list [here](https://profiler.chladektomas.eu/app/devices).
-    * CPU load
+    * CPU load and frequency
     * GPU load
     * RAM usage
     * Network traffic
@@ -42,7 +42,7 @@ maven {
 
 ```gradle
 dependencies {
-    implementation 'cz.chladek:profiler-api:1.0.1'
+    implementation 'cz.chladek:profiler-api:1.0.2'
 }
 ```
 
@@ -57,11 +57,11 @@ profiler.setListener(new ProfilerEventListenerAdapter() {
         DeviceConfig[] devices = profiler.getSupportedDevices();
         FloatingLayout layout = new FloatingLayout();
 
-        CPUDeviceConfig[] cpus = DeviceConfigHelper.findDevices(devices, CPUDeviceConfig.class);
+        CPUDeviceConfig[] cpuLoad = DeviceConfigHelper.findDevices(devices, CPUDeviceConfig.class, device -> device.getMode() == Mode.LOAD);
         GPUDeviceConfig gpu = DeviceConfigHelper.findDevice(devices, GPUDeviceConfig.class);
         RAMDeviceConfig ram = DeviceConfigHelper.findDevice(devices, RAMDeviceConfig.class);
 
-        for (CPUDeviceConfig cpu : cpus)
+        for (CPUDeviceConfig cpu : cpuLoad)
             layout.addDevice(cpu);
 
         if (gpu != null)
