@@ -11,7 +11,7 @@ public abstract class DeviceConfig implements Parcelable {
 	}
 
 	public enum Unit {
-		BYTES, PERCENTAGE, TEMPERATURE, VOLTAGE, CURRENT
+		BYTES, PERCENTAGE, TEMPERATURE, VOLTAGE, CURRENT, FREQUENCY
 	}
 
 	public static final double BAR_MAX_MAX = -963258741;

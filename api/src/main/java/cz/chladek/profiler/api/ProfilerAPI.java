@@ -55,6 +55,7 @@ public class ProfilerAPI {
 	private static final String PROFILER_PACKAGE = "cz.chladek.profiler";
 	private static final String PROFILER_CONNECT_ACTION = "cz.chladek.profiler.api.RemoteService";
 	private static final String EXTRA_SENDER_PACKAGE = "EXTRA_SENDER_PACKAGE";
+	private static final String EXTRA_SENDER_API_VERSION = "EXTRA_SENDER_API_VERSION";
 
 	private static final String BUNDLE_SAVED_STATE = BuildConfig.APPLICATION_ID + ".BUNDLE_SAVED_STATE";
 
@@ -136,6 +137,7 @@ public class ProfilerAPI {
 		intent.setPackage(PROFILER_PACKAGE);
 		intent.setAction(PROFILER_CONNECT_ACTION);
 		intent.putExtra(EXTRA_SENDER_PACKAGE, context.getPackageName());
+		intent.putExtra(EXTRA_SENDER_API_VERSION, Version.CODE);
 		context.bindService(intent, connection, Context.BIND_AUTO_CREATE | Context.BIND_IMPORTANT);
 	}
 
