@@ -1,6 +1,7 @@
 package cz.chladek.profiler.api.devices;
 
 import android.os.Parcel;
+import android.support.annotation.NonNull;
 
 public class BatteryDeviceConfig extends DeviceConfig {
 
@@ -21,6 +22,7 @@ public class BatteryDeviceConfig extends DeviceConfig {
 		return direction;
 	}
 
+	@NonNull
 	@Override
 	public String toString() {
 		return "BatteryDeviceConfig{unit=" + unit + (direction == null ? "" : ", direction=" + direction.name()) + '}';

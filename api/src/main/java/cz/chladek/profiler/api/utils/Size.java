@@ -2,6 +2,7 @@ package cz.chladek.profiler.api.utils;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 public class Size implements Parcelable {
 
@@ -17,6 +18,7 @@ public class Size implements Parcelable {
 		height = in.readInt();
 	}
 
+	@NonNull
 	@Override
 	public String toString() {
 		return "Size{width=" + width + ", height=" + height + '}';

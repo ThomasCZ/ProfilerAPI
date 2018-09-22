@@ -1,6 +1,7 @@
 package cz.chladek.profiler.api.devices;
 
 import android.os.Parcel;
+import android.support.annotation.NonNull;
 
 public class TemperatureDeviceConfig extends DeviceConfig {
 
@@ -15,6 +16,7 @@ public class TemperatureDeviceConfig extends DeviceConfig {
 		return name;
 	}
 
+	@NonNull
 	@Override
 	public String toString() {
 		return "TemperatureDeviceConfig{name=" + name + '}';

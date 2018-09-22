@@ -1,6 +1,7 @@
 package cz.chladek.profiler.api.devices;
 
 import android.os.Parcel;
+import android.support.annotation.NonNull;
 
 public class NetworkDeviceConfig extends DeviceConfig {
 
@@ -25,6 +26,7 @@ public class NetworkDeviceConfig extends DeviceConfig {
 		return direction;
 	}
 
+	@NonNull
 	@Override
 	public String toString() {
 		return "NetworkDeviceConfig{name=" + name + ", direction=" + direction + '}';

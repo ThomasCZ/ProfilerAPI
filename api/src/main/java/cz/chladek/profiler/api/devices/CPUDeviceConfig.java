@@ -1,6 +1,7 @@
 package cz.chladek.profiler.api.devices;
 
 import android.os.Parcel;
+import android.support.annotation.NonNull;
 
 public class CPUDeviceConfig extends DeviceConfig {
 
@@ -30,6 +31,7 @@ public class CPUDeviceConfig extends DeviceConfig {
 		return mode;
 	}
 
+	@NonNull
 	@Override
 	public String toString() {
 		return "CPUDeviceConfig{core=" + core + ", mode=" + mode.name() + '}';

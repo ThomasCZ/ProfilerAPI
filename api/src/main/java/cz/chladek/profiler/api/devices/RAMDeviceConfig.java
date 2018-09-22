@@ -1,6 +1,7 @@
 package cz.chladek.profiler.api.devices;
 
 import android.os.Parcel;
+import android.support.annotation.NonNull;
 
 public class RAMDeviceConfig extends DeviceConfig {
 
@@ -8,6 +9,7 @@ public class RAMDeviceConfig extends DeviceConfig {
 		super(in, Type.RAM);
 	}
 
+	@NonNull
 	@Override
 	public String toString() {
 		return "RAMDeviceConfig{}";
