@@ -23,6 +23,24 @@ public class BatteryDeviceConfig extends DeviceConfig {
 		return direction;
 	}
 
+	/**
+	 * Can be set only when {@link DeviceConfig#getUnit()} returns some of temperature unit.
+	 * If {@link cz.chladek.profiler.api.devices.DeviceConfig.Unit#TEMPERATURE} is set, celsius or fahrenheit will be automatically selected from device locale.
+	 *
+	 * @see cz.chladek.profiler.api.devices.DeviceConfig.Unit#TEMPERATURE
+	 * @see cz.chladek.profiler.api.devices.DeviceConfig.Unit#TEMPERATURE_CELSIUS
+	 * @see cz.chladek.profiler.api.devices.DeviceConfig.Unit#TEMPERATURE_FAHRENHEIT
+	 */
+	public void setUnit(Unit newUnit) {
+		if (unit != Unit.TEMPERATURE && unit != Unit.TEMPERATURE_CELSIUS && unit != Unit.TEMPERATURE_FAHRENHEIT)
+			throw new IllegalArgumentException("Unit can be set only when temperature is measured");
+
+		if (newUnit != Unit.TEMPERATURE && newUnit != Unit.TEMPERATURE_CELSIUS && newUnit != Unit.TEMPERATURE_FAHRENHEIT)
+			throw new IllegalArgumentException("Illegal temperature unit");
+
+		unit = newUnit;
+	}
+
 	@NonNull
 	@Override
 	public String toString() {
