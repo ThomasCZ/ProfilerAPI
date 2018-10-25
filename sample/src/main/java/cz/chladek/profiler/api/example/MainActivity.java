@@ -345,7 +345,7 @@ public class MainActivity extends Activity {
 	private CompoundButton.OnCheckedChangeListener onAnchorChangedListener = new CompoundButton.OnCheckedChangeListener() {
 		@Override
 		public void onCheckedChanged(CompoundButton button, boolean isChecked) {
-			if (!isChecked)
+			if (!isChecked || !profiler.isConnected())
 				return;
 
 			RadioGroup group = (RadioGroup) button.getParent();
