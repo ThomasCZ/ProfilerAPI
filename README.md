@@ -70,7 +70,7 @@ profiler.setListener(new ProfilerEventListenerAdapter() {
         if (ram != null)
             layout.addDevice(ram);
 
-        layout.pack(FloatingLayout.Direction.RIGHT, 4, 3);
+        layout.pack(Direction.RIGHT, 4, 3);
 
         profiler.setLayout(layout);
         profiler.setChartScale(0.75f);

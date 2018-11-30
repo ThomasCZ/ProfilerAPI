@@ -162,12 +162,9 @@ public class ProfilerAPI {
 			if (started) {
 				started = false;
 
-				handler.post(new Runnable() {
-					@Override
-					public void run() {
-						if (listener != null)
-							listener.onDisconnected();
-					}
+				handler.post(() -> {
+					if (listener != null)
+						listener.onDisconnected();
 				});
 			}
 		}
@@ -513,14 +510,11 @@ public class ProfilerAPI {
 			if (state != null)
 				state.clear();
 
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					if (started && listener != null)
-						listener.onDisconnected();
+			handler.post(() -> {
+				if (started && listener != null)
+					listener.onDisconnected();
 
-					started = false;
-				}
+				started = false;
 			});
 		}
 	};
@@ -534,23 +528,17 @@ public class ProfilerAPI {
 
 			started = true;
 
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					if (listener != null)
-						listener.onConnected();
-				}
+			handler.post(() -> {
+				if (listener != null)
+					listener.onConnected();
 			});
 		}
 
 		@Override
 		public void onWindowSizeChanged(final int width, final int height) {
-			handler.post(new Runnable() {
-				@Override
-				public void run() {
-					if (listener != null)
-						listener.onWindowSizeChanged(width, height);
-				}
+			handler.post(() -> {
+				if (listener != null)
+					listener.onWindowSizeChanged(width, height);
 			});
 		}
 	};
