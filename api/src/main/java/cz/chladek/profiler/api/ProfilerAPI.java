@@ -509,7 +509,9 @@ public class ProfilerAPI {
 
 		public void onServiceDisconnected(ComponentName className) {
 			profilerInterface = null;
-			state.clear();
+
+			if (state != null)
+				state.clear();
 
 			handler.post(new Runnable() {
 				@Override
