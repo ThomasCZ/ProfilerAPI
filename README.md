@@ -96,6 +96,36 @@ protected void onResume() {
 ...
 ```
 
+## Kotlin
+
+API is fully compatible with Kotlin programming language, but is written in Java to keep maximum compatibility.
+
+#### Basic extensions
+
+```kotlin
+operator fun FloatingLayout.plusAssign(device: DeviceConfig?) {
+    addDevice(device)
+}
+
+fun <T : DeviceConfig> Array<DeviceConfig>.findDevice(clazz: KClass<T>): T? {
+    return DeviceConfigHelper.findDevice(this, clazz.java)
+}
+
+fun <T : DeviceConfig> Array<DeviceConfig>.findDevices(clazz: KClass<T>, suitableListener: ((T) -> Boolean)? = null): Array<T> {
+    return DeviceConfigHelper.findDevices(this, clazz.java, suitableListener)
+}
+```
+
+#### Usage
+
+```kotlin
+val cpuLoad = devices.findDevices(CPUDeviceConfig::class) { it.mode == CPUDeviceConfig.Mode.LOAD }
+val network = devices.findDevices(NetworkDeviceConfig::class)
+
+val layout = FloatingLayout()
+layout += devices.findDevice(GPUDeviceConfig::class)
+```
+
 ## About
 
 Copyright 2018 Tomas Chladek, licenced under the [Apache Licence, Version 2.0](LICENCE.txt).
