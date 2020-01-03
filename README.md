@@ -1,5 +1,4 @@
 # ProfilerAPI
-
 Lightweight API that allows integrate [Profiler](https://play.google.com/store/apps/details?id=cz.chladek.profiler) functionality into your application. Library mediates communication with the Profiler application.
 
 #### Profiler application features
@@ -12,21 +11,26 @@ Lightweight API that allows integrate [Profiler](https://play.google.com/store/a
     * Temperature
     * Battery voltage, temperature and current
 
-#### API allows to set
-* custom layout built by AbsoluteLayout or FloatingLayout
-* labels, formats and colors
-* anchor of window transitions
-* specific location in portrait and landscape
-* chart size
-* window and background alpha
+#### API allows
+* built custom layout with AbsoluteLayout or FloatingLayout
+* set anchor of window transitions and specific location for portrait and landscape
+* set labels, formats and colors
+* set window and background alpha
+* set chart size
 
 #### Sample application
-
 The sample application uses all features allowed by the API.
 
-[![Screenshot1](http://postimg.cz/images/xWMNt.png)](http://postimg.cz/images/xWj64.png) ![](http://postimg.cz/images/xWv2B.png) [![Screenshot2](http://postimg.cz/images/xWSPY.png)](http://postimg.cz/images/xWqdJ.png) ![](http://postimg.cz/images/xWv2B.png) [![Screenshot3](http://postimg.cz/images/xWiQa.png)](http://postimg.cz/images/xWaKi.png)
+**[Get it on Google Play](https://play.google.com/store/apps/details?id=cz.chladek.profiler.api.example "Google Play")**
 
-[![Get it on Google Play](http://www.postimg.cz/images/xW3yA.png)](https://play.google.com/store/apps/details?id=cz.chladek.profiler.api.example)
+![Screenshot 1](art/sample1.png) &nbsp;&nbsp;&nbsp;&nbsp; ![Screenshot 2](art/sample2.png)
+
+#### Real usage
+Screenshots from performance intensive applications.
+
+![Playground](art/playground.jpg)
+
+![RayTracer](art/raytracer.jpg)
 
 ## Quick start
 
@@ -97,11 +101,9 @@ protected void onResume() {
 ```
 
 ## Kotlin
-
-API is fully compatible with Kotlin programming language, but is written in Java to keep maximum compatibility.
+API is fully compatible with Kotlin programming language, but written in Java to keep minimum library size.
 
 #### Basic extensions
-
 ```kotlin
 operator fun FloatingLayout.plusAssign(device: DeviceConfig?) {
     addDevice(device)
@@ -111,13 +113,12 @@ fun <T : DeviceConfig> Array<DeviceConfig>.findDevice(clazz: KClass<T>): T? {
     return DeviceConfigHelper.findDevice(this, clazz.java)
 }
 
-fun <T : DeviceConfig> Array<DeviceConfig>.findDevices(clazz: KClass<T>, suitableListener: ((T) -> Boolean)? = null): Array<T> {
-    return DeviceConfigHelper.findDevices(this, clazz.java, suitableListener)
+fun <T : DeviceConfig> Array<DeviceConfig>.findDevices(clazz: KClass<T>, predicate: ((T) -> Boolean)? = null): Array<T> {
+    return DeviceConfigHelper.findDevices(this, clazz.java, predicate)
 }
 ```
 
 #### Usage
-
 ```kotlin
 val cpuLoad = devices.findDevices(CPUDeviceConfig::class) { it.mode == CPUDeviceConfig.Mode.LOAD }
 val network = devices.findDevices(NetworkDeviceConfig::class)
@@ -127,5 +128,4 @@ layout += devices.findDevice(GPUDeviceConfig::class)
 ```
 
 ## About
-
 Copyright 2018 Tomas Chladek, licenced under the [Apache Licence, Version 2.0](LICENCE.txt).
