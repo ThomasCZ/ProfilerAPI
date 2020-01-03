@@ -13,6 +13,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import cz.chladek.profiler.api.ProfilerAPI;
 import cz.chladek.profiler.api.ProfilerEventListener;
 import cz.chladek.profiler.api.devices.CPUDeviceConfig;
@@ -110,7 +112,7 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+	protected void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
 		profiler.getLifecycleHelper().onSaveInstanceState(outState);
 	}

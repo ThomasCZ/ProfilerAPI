@@ -57,7 +57,7 @@ public class ProfilerAPI {
 	private static final String EXTRA_SENDER_PACKAGE = "EXTRA_SENDER_PACKAGE";
 	private static final String EXTRA_SENDER_API_VERSION = "EXTRA_SENDER_API_VERSION";
 
-	private static final String BUNDLE_SAVED_STATE = BuildConfig.APPLICATION_ID + ".BUNDLE_SAVED_STATE";
+	private static final String BUNDLE_SAVED_STATE = BuildConfig.LIBRARY_PACKAGE_NAME + ".BUNDLE_SAVED_STATE";
 
 	public enum AppStatus {
 		OK, NOT_INSTALLED, UNSUPPORTED_VERSION

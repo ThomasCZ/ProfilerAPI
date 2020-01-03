@@ -13,7 +13,7 @@ class ProjectInfo {
 
 	static def groupId = "cz.chladek"
 	static def artifactId = "profiler-api"
-	static def version = "1.2.0"
+	static def version = "1.2.1"
 
 	static def licences = ["Apache-2.0"]
 }
@@ -107,6 +107,6 @@ bintray {
 			}
 		}
 
-		dryRun = true
+		dryRun = true //TODO false to upload
 	}
 }
