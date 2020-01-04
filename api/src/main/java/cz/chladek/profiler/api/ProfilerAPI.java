@@ -16,12 +16,13 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import cz.chladek.profiler.api.devices.DeviceConfig;
 import cz.chladek.profiler.api.layout.AbsoluteLayout;
 import cz.chladek.profiler.api.layout.FloatingLayout;
@@ -82,7 +83,7 @@ public class ProfilerAPI {
 	private Bundle state;
 
 	public ProfilerAPI(@NonNull Context context) {
-		this.context = context;
+		this.context = context.getApplicationContext();
 
 		handler = new Handler(Looper.getMainLooper());
 		lifecycleHelper = new LifecycleHelper(this);
