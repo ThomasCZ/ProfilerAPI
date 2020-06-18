@@ -113,7 +113,9 @@ public class ProfilerAPI {
 	 */
 	public void openGooglePlay() {
 		try {
-			context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + PROFILER_PACKAGE)));
+			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + PROFILER_PACKAGE));
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			context.startActivity(intent);
 		} catch (ActivityNotFoundException e) {
 			e.printStackTrace();
 		}
