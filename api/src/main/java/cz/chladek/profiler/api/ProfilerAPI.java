@@ -124,11 +124,20 @@ public class ProfilerAPI {
 	/**
 	 * Useful for handle Android application lifecycle.
 	 */
+	@NonNull
 	public LifecycleHelper getLifecycleHelper() {
 		return lifecycleHelper;
 	}
 
-	public void setListener(ProfilerEventListener listener) {
+	@Nullable
+	public ProfilerEventListener getListener() {
+		return listener;
+	}
+
+	/**
+	 * Listener for listening Profiler events.
+	 */
+	public void setListener(@Nullable ProfilerEventListener listener) {
 		this.listener = listener;
 	}
 
@@ -136,17 +145,19 @@ public class ProfilerAPI {
 	 * Establish communication with the application.
 	 *
 	 * @throws IllegalArgumentException when {@link ProfilerAPI#getAppStatus()} not returns {@link ProfilerAPI.AppStatus#OK}.
+	 * @see ProfilerAPI#setListener
 	 */
 	public void connect() {
 		AppStatus appStatus = getAppStatus();
 		if (appStatus != AppStatus.OK)
 			throw new IllegalArgumentException("getAppStatus() must returns AppStatus.OK to connect.");
 
-		Intent intent = new Intent();
-		intent.setPackage(PROFILER_PACKAGE);
-		intent.setAction(PROFILER_CONNECT_ACTION);
-		intent.putExtra(EXTRA_SENDER_PACKAGE, context.getPackageName());
-		intent.putExtra(EXTRA_SENDER_API_VERSION, Version.CODE);
+		Intent intent = new Intent()
+				.setPackage(PROFILER_PACKAGE)
+				.setAction(PROFILER_CONNECT_ACTION)
+				.putExtra(EXTRA_SENDER_PACKAGE, context.getPackageName())
+				.putExtra(EXTRA_SENDER_API_VERSION, Version.CODE);
+
 		context.bindService(intent, connection, Context.BIND_AUTO_CREATE | Context.BIND_IMPORTANT);
 	}
 
@@ -283,11 +294,18 @@ public class ProfilerAPI {
 	}
 
 	/**
+	 * Get window layout.
+	 */
+	@Nullable
+	public Layout getLayout() {
+		return state.getParcelable(BundleKey.LAYOUT);
+	}
+
+	/**
 	 * Set window layout. Null for clear, disable monitoring and hide window.
 	 *
 	 * @see AbsoluteLayout
 	 * @see FloatingLayout
-	 * @see #getSupportedDevices()
 	 */
 	public void setLayout(@Nullable Layout layout) {
 		throwWhenDisconnected();
@@ -471,10 +489,17 @@ public class ProfilerAPI {
 	}
 
 	/**
+	 * Sets profiler windows visibility with alpha animation. Same as setVisible(visible, true).
+	 */
+	public void setVisible(boolean visible) {
+		setVisible(visible, true);
+	}
+
+	/**
 	 * Sets profiler window visibility.
 	 *
 	 * @param visible  true for visible
-	 * @param animated true for animated change with duration 300ms
+	 * @param animated true for alpha animation change with duration 300ms
 	 */
 	public void setVisible(boolean visible, boolean animated) {
 		throwWhenDisconnected();
@@ -495,7 +520,7 @@ public class ProfilerAPI {
 			throw new RuntimeException("Service is not connected.");
 	}
 
-	private ServiceConnection connection = new ServiceConnection() {
+	private final ServiceConnection connection = new ServiceConnection() {
 
 		public void onServiceConnected(ComponentName className, IBinder service) {
 			profilerInterface = ProfilerInterface.Stub.asInterface(service);
@@ -522,7 +547,7 @@ public class ProfilerAPI {
 		}
 	};
 
-	private ProfilerListener remoteProfilerListener = new ProfilerListener.Stub() {
+	private final ProfilerListener remoteProfilerListener = new ProfilerListener.Stub() {
 
 		@Override
 		public void onStarted() {

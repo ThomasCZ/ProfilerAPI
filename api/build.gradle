@@ -10,6 +10,9 @@ android {
 		versionName "1.2.1"
 
 		consumerProguardFiles "proguard-rules.pro"
+
+		buildConfigField "int", "VERSION_CODE", "$versionCode"
+		buildConfigField "String", "VERSION_NAME", "$versionName"
 	}
 
 	compileOptions {

@@ -109,6 +109,10 @@ operator fun FloatingLayout.plusAssign(device: DeviceConfig?) {
     addDevice(device)
 }
 
+operator fun AbsoluteLayout.set(x: Int, y: Int, device: DeviceConfig) {
+	setDevice(x, y, device)
+}
+
 fun <T : DeviceConfig> Array<DeviceConfig>.findDevice(clazz: KClass<T>): T? {
     return DeviceConfigHelper.findDevice(this, clazz.java)
 }
@@ -123,9 +127,12 @@ fun <T : DeviceConfig> Array<DeviceConfig>.findDevices(clazz: KClass<T>, predica
 val cpuLoad = devices.findDevices(CPUDeviceConfig::class) { it.mode == CPUDeviceConfig.Mode.LOAD }
 val network = devices.findDevices(NetworkDeviceConfig::class)
 
-val layout = FloatingLayout()
-layout += devices.findDevice(GPUDeviceConfig::class)
+val floatingLayout = FloatingLayout()
+floatingLayout += devices.findDevice(GPUDeviceConfig::class)
+
+val absoluteLayout = AbsoluteLayout(width, height)
+absoluteLayout[0, 0] = devices.findDevice(GPUDeviceConfig::class)
 ```
 
 ## About
-Copyright 2018 Tomas Chladek, licenced under the [Apache Licence, Version 2.0](LICENCE.txt).
+Copyright 2020 Tomas Chladek, licenced under the [Apache Licence, Version 2.0](LICENCE.txt).
