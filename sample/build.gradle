@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
 	compileSdkVersion 29
@@ -28,13 +29,19 @@ android {
 		targetCompatibility JavaVersion.VERSION_1_8
 	}
 
+	buildFeatures {
+		viewBinding true
+	}
+
 	lintOptions {
 		disable "AllowBackup", "GoogleAppIndexingWarning", "SetTextI18n", "HardcodedText", "RtlHardcoded", "Autofill", "LabelFor", "ButtonStyle"
 	}
 }
 
 dependencies {
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 	implementation 'androidx.annotation:annotation:+'
+	implementation "androidx.core:core-ktx:+"
 
 	implementation project(':api')
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/scroll"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:focusable="true">
@@ -14,21 +15,21 @@
 		android:paddingBottom="20dp">
 
 		<TextView
-			android:id="@+id/appStatusTextView"
+			android:id="@+id/app_status"
 			style="@style/MessageTextViewStyle"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			tools:text="installed" />
 
 		<TextView
-			android:id="@+id/connectedTextView"
+			android:id="@+id/connect_status"
 			style="@style/MessageTextViewStyle"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:text="not connected!" />
 
 		<TextView
-			android:id="@+id/permissionTextView"
+			android:id="@+id/profiler_permission"
 			style="@style/MessageTextViewStyle"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -43,14 +44,14 @@
 			android:orientation="horizontal">
 
 			<Button
-				android:id="@+id/connectButton"
+				android:id="@+id/connect"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
 				android:text="Connect" />
 
 			<Button
-				android:id="@+id/disconnectButton"
+				android:id="@+id/disconnect"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
@@ -63,14 +64,14 @@
 			android:orientation="horizontal">
 
 			<Button
-				android:id="@+id/showButton"
+				android:id="@+id/show"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
 				android:text="Show" />
 
 			<Button
-				android:id="@+id/showAnimatedButton"
+				android:id="@+id/show_animated"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
@@ -83,14 +84,14 @@
 			android:orientation="horizontal">
 
 			<Button
-				android:id="@+id/hideButton"
+				android:id="@+id/hide"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
 				android:text="Hide" />
 
 			<Button
-				android:id="@+id/hideAnimatedButton"
+				android:id="@+id/hide_animated"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
@@ -98,7 +99,7 @@
 		</LinearLayout>
 
 		<Button
-			android:id="@+id/openGooglePlayButton"
+			android:id="@+id/open_google_play"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:text="Open Google Play" />
@@ -115,14 +116,14 @@
 			android:orientation="horizontal">
 
 			<Button
-				android:id="@+id/requestPermissionButton"
+				android:id="@+id/request_permission"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
 				android:text="Request" />
 
 			<Button
-				android:id="@+id/requestPermissionAskButton"
+				android:id="@+id/request_permission_ask"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
@@ -136,13 +137,13 @@
 			android:text="Layout" />
 
 		<Button
-			android:id="@+id/createAbsoluteLayoutButton"
+			android:id="@+id/create_absolute_layout"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:text="Create absolute" />
 
 		<RadioGroup
-			android:id="@+id/floatingLayoutDirectionGroup"
+			android:id="@+id/floating_layout_direction_group"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="horizontal">
@@ -155,7 +156,7 @@
 				android:text="Dir" />
 
 			<RadioButton
-				android:id="@+id/floatingDirectionRight"
+				android:id="@+id/floating_direction_right"
 				style="@style/RadioButtonStyle"
 				android:layout_width="40dp"
 				android:layout_height="40dp"
@@ -166,7 +167,7 @@
 				android:textStyle="bold" />
 
 			<RadioButton
-				android:id="@+id/floatingDirectionDown"
+				android:id="@+id/floating_direction_down"
 				style="@style/RadioButtonStyle"
 				android:layout_width="40dp"
 				android:layout_height="40dp"
@@ -176,7 +177,7 @@
 				android:textStyle="bold" />
 
 			<Button
-				android:id="@+id/createFloatingLayoutButton"
+				android:id="@+id/create_floating_layout"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
@@ -184,19 +185,19 @@
 		</RadioGroup>
 
 		<Button
-			android:id="@+id/clearLayoutButton"
+			android:id="@+id/clear_layout"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:text="Clear layout" />
 
 		<Button
-			android:id="@+id/getDevicesButton"
+			android:id="@+id/get_supported_devices"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:text="Get supported devices" />
 
 		<TextView
-			android:id="@+id/devicesListTextView"
+			android:id="@+id/devices_list"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="10dp"
@@ -225,7 +226,7 @@
 				android:text="Anchor" />
 
 			<include
-				android:id="@+id/anchorPortGroup"
+				android:id="@+id/anchor_port_group"
 				layout="@layout/anchor" />
 		</LinearLayout>
 
@@ -252,7 +253,7 @@
 					android:text="x" />
 
 				<EditText
-					android:id="@+id/locationPortXField"
+					android:id="@+id/location_port_x"
 					style="@style/EditTextStyle"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -272,7 +273,7 @@
 					android:text="y" />
 
 				<EditText
-					android:id="@+id/locationPortYField"
+					android:id="@+id/location_port_y"
 					style="@style/EditTextStyle"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -281,7 +282,7 @@
 			</RelativeLayout>
 
 			<Button
-				android:id="@+id/setLocationPortButton"
+				android:id="@+id/set_port_location"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_vertical"
@@ -307,7 +308,7 @@
 				android:text="Anchor" />
 
 			<include
-				android:id="@+id/anchorLandGroup"
+				android:id="@+id/anchor_land_group"
 				layout="@layout/anchor" />
 		</LinearLayout>
 
@@ -334,7 +335,7 @@
 					android:text="x" />
 
 				<EditText
-					android:id="@+id/locationLandXField"
+					android:id="@+id/location_land_x"
 					style="@style/EditTextStyle"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -354,7 +355,7 @@
 					android:text="y" />
 
 				<EditText
-					android:id="@+id/locationLandYField"
+					android:id="@+id/location_land_y"
 					style="@style/EditTextStyle"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -363,7 +364,7 @@
 			</RelativeLayout>
 
 			<Button
-				android:id="@+id/setLocationLandButton"
+				android:id="@+id/set_land_location"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_vertical"
@@ -382,7 +383,7 @@
 			android:orientation="horizontal">
 
 			<TextView
-				android:id="@+id/currentLocationTextView"
+				android:id="@+id/current_location"
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
@@ -391,7 +392,7 @@
 				android:textColor="@android:color/black" />
 
 			<Button
-				android:id="@+id/getLocationButton"
+				android:id="@+id/get_location"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="Get" />
@@ -409,7 +410,7 @@
 			android:orientation="horizontal">
 
 			<EditText
-				android:id="@+id/sizeScaleField"
+				android:id="@+id/chart_size_scale"
 				style="@style/EditTextStyle"
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
@@ -419,7 +420,7 @@
 				android:text="1" />
 
 			<Button
-				android:id="@+id/setSizeScaleButton"
+				android:id="@+id/set_chart_size_scale"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="Set" />
@@ -437,7 +438,7 @@
 			android:orientation="horizontal">
 
 			<TextView
-				android:id="@+id/sizeTextView"
+				android:id="@+id/window_size"
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
 				android:layout_weight="1"
@@ -446,7 +447,7 @@
 				android:textColor="@android:color/black" />
 
 			<Button
-				android:id="@+id/getSizeButton"
+				android:id="@+id/get_window_size"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="Get" />
@@ -459,7 +460,7 @@
 			android:text="Window alpha" />
 
 		<SeekBar
-			android:id="@+id/monitorAlphaSeekBar"
+			android:id="@+id/window_alpha"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="20dp"
@@ -474,7 +475,7 @@
 			android:text="Background alpha" />
 
 		<SeekBar
-			android:id="@+id/backgroundAlphaSeekBar"
+			android:id="@+id/background_alpha"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="20dp"
