@@ -46,7 +46,7 @@ maven {
 
 ```gradle
 dependencies {
-    implementation 'cz.chladek:profiler-api:1.2.1'
+    implementation 'cz.chladek:profiler-api:1.2.2'
 }
 ```
 
