@@ -12,8 +12,8 @@ Lightweight API that allows integrate [Profiler](https://play.google.com/store/a
     * Battery voltage, temperature and current
 
 #### API allows
-* built custom layout with AbsoluteLayout or FloatingLayout
-* set anchor of window transitions and specific location for portrait and landscape
+* built custom layout with `AbsoluteLayout` or `FloatingLayout`
+* set window anchor for transitions and specific location for portrait and landscape
 * set labels, formats and colors
 * set window and background alpha
 * set chart size
@@ -34,19 +34,21 @@ Screenshots from performance intensive applications.
 
 ## Quick start
 
-**1)** Add maven repository into root *build.gradle* file.
+**1)** Add snippet below to your root *build.gradle* file.
 
 ```gradle
-maven {
-    url "https://dl.bintray.com/chladektomas/maven"
+buildscript {
+    repositories {
+        mavenCentral()
+    }
 }
 ```
 
-**2)** Add this library as a dependency in your application's *build.gradle* file.
+**2)** Add the library as a dependency in your application's *build.gradle* file.
 
 ```gradle
 dependencies {
-    implementation 'cz.chladek:profiler-api:1.2.2'
+    implementation 'app.chladek:profiler-api:1.2.3'
 }
 ```
 
@@ -101,7 +103,7 @@ protected void onResume() {
 ```
 
 ## Kotlin
-API is fully compatible with Kotlin programming language, but written in Java to keep minimum library size.
+Library is fully compatible with Kotlin programming language, but written in Java to keep minimum library size.
 
 #### Basic extensions
 ```kotlin
@@ -135,4 +137,4 @@ absoluteLayout[0, 0] = devices.findDevice(GPUDeviceConfig::class)
 ```
 
 ## About
-Copyright 2020 Tomas Chladek, licenced under the [Apache Licence, Version 2.0](LICENCE.txt).
+Copyright 2021 Tomas Chladek, licenced under the [Apache Licence, Version 2.0](LICENCE.txt).
