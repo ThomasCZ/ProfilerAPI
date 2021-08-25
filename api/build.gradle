@@ -1,18 +1,19 @@
 apply plugin: 'com.android.library'
+apply from: 'publish.gradle'
 
 android {
-	compileSdkVersion 29
+	compileSdkVersion rootProject.ext.compileSdkVersion
 
 	defaultConfig {
-		minSdkVersion 14
-		targetSdkVersion 29
-		versionCode 6
-		versionName "1.2.2"
+		minSdkVersion rootProject.ext.minSdkVersion
+		targetSdkVersion rootProject.ext.targetSdkVersion
+		versionCode rootProject.ext.versionCode
+		versionName rootProject.ext.versionName
 
-		consumerProguardFiles "proguard-rules.pro"
+        consumerProguardFiles "proguard-rules.pro"
 
 		buildConfigField "int", "VERSION_CODE", "$versionCode"
-		buildConfigField "String", "VERSION_NAME", "$versionName"
+		buildConfigField "String", "VERSION_NAME", "\"$versionName\""
 	}
 
 	compileOptions {
@@ -26,19 +27,5 @@ configurations {
 }
 
 dependencies {
-	javadocs 'androidx.annotation:annotation:+'
-	implementation 'androidx.annotation:annotation:+'
+	implementation 'androidx.annotation:annotation:1.2.0'
 }
-
-task javadoc(type: Javadoc) {
-	failOnError false
-	source = android.sourceSets.main.java.sourceFiles
-	destinationDir = rootProject.file("docs/javadoc")
-	classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-	classpath += configurations.compile
-	classpath += configurations.javadocs
-	options.noTimestamp = true
-	options.links = ['https://developer.android.com/reference/']
-}
-
-apply from: 'publish.gradle'
