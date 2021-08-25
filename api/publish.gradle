@@ -1,112 +1,63 @@
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
-
-class ProjectInfo {
-	static def name = "Profiler API"
-	static def description = "API for Android application Profiler"
-	static def url = "https://github.com/ThomasCZ/ProfilerAPI"
-	static def tags = ['android', 'profiler', 'api']
-
-	static def vcsUrl = "https://github.com/ThomasCZ/ProfilerAPI.git"
-	static def vcsTag = "https://github.com/ThomasCZ/ProfilerAPI/releases/tag/v${version}"
-
-	static def groupId = "cz.chladek"
-	static def artifactId = "profiler-api"
-	static def version = "1.2.2"
-
-	static def licences = ["Apache-2.0"]
-}
-
-def pomConfig = {
-	name ProjectInfo.name
-	url ProjectInfo.url
-	description ProjectInfo.description
-
-	scm {
-		url ProjectInfo.url
-	}
-
-	licenses {
-		license {
-			name "The Apache License, Version 2.0"
-			url "http://www.apache.org/licenses/LICENSE-2.0.txt"
-		}
-	}
-
-	developers {
-		developer {
-			name "Tomas Chladek"
-			email "tomas@chladek.app"
-		}
-	}
-}
+apply plugin: 'signing'
 
 task sourcesJar(type: Jar) {
-	from android.sourceSets.main.java.srcDirs
-	classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+    classifier = "sources"
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-	classifier = 'javadoc'
-	from javadoc.destinationDir
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId "app.chladek"
+                artifactId "profiler-api"
+                version rootProject.ext.versionName
+
+                artifact sourcesJar
+
+                pom {
+                    name = "Profiler API"
+                    description = "API for Android application Profiler"
+                    url = "https://github.com/ThomasCZ/ProfilerAPI"
+
+                    scm {
+                        url = "https://github.com/ThomasCZ/ProfilerAPI"
+                    }
+
+                    licenses {
+                        license {
+                            name = "The Apache License, Version 2.0"
+                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            name = "Tomas Chladek"
+                            email = "tomas@chladek.app"
+                        }
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                name = "sonatype"
+                url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+
+                credentials {
+                    username ossrhUsername
+                    password ossrhPassword
+                }
+            }
+        }
+    }
 }
 
-publishing {
-	publications {
-		Production(MavenPublication) {
-			artifact("$buildDir/outputs/aar/api-release.aar")
-			artifact sourcesJar
-			artifact javadocJar
-
-			groupId ProjectInfo.groupId
-			artifactId ProjectInfo.artifactId
-			version ProjectInfo.version
-
-			pom.withXml {
-				//FIXME The one from pomConfig is missing
-				asNode().appendNode("description", ProjectInfo.description)
-				asNode().children().last() + pomConfig
-
-				def dependenciesNode = asNode().appendNode('dependencies')
-				configurations.implementation.allDependencies.each {
-					if (it.name != 'unspecified') {
-						def dependencyNode = dependenciesNode.appendNode('dependency')
-						dependencyNode.appendNode('groupId', it.group)
-						dependencyNode.appendNode('artifactId', it.name)
-						dependencyNode.appendNode('version', it.version)
-					}
-				}
-			}
-		}
-	}
-}
-
-bintray {
-	user = System.getenv('BINTRAY_USER')
-	key = System.getenv('BINTRAY_API_KEY')
-	publications = ['Production']
-	override = true
-	pkg {
-		repo = 'maven'
-		name = 'profiler-api'
-		description = ProjectInfo.description
-		labels = ProjectInfo.tags
-		publish = true
-		publicDownloadNumbers = true
-		licenses = ProjectInfo.licences
-		vcsUrl = ProjectInfo.vcsUrl
-		version {
-			name = ProjectInfo.version
-			desc = "v${ProjectInfo.version}"
-			released = new Date()
-			vcsTag = ProjectInfo.vcsTag
-			gpg {
-				sign = true
-				passphrase = System.getenv('GPG_PASSPHRASE')
-			}
-		}
-
-		dryRun = true //TODO false to upload
-	}
+signing {
+    sign publishing.publications
 }
