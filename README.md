@@ -48,7 +48,7 @@ buildscript {
 
 ```gradle
 dependencies {
-    implementation 'app.chladek:profiler-api:1.2.3'
+    implementation 'app.chladek:profiler-api:1.2.4'
 }
 ```
 
